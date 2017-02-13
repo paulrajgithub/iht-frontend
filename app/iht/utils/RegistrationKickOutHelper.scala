@@ -44,6 +44,9 @@ object RegistrationKickOutHelper {
 
   lazy val KickoutNotApplyingForProbate = "KickoutNotApplyingForProbate"
 
+  lazy val KickOutPageInStandardMode = iht.controllers.registration.routes.KickoutController.onPageLoad()
+  lazy val KickOutPageInEditMode = iht.controllers.registration.routes.KickoutController.onEditPageLoad()
+
   def kickoutReasonDeceasedDateOfDeathInternal(deceasedDateOfDeath:DeceasedDateOfDeath): Option[String] =
     deceasedDateOfDeath.dateOfDeath match {
     case x if IhtProperties.dateOfDeathMinValidationDate.compareTo(deceasedDateOfDeath.dateOfDeath) > 0 => Some(KickoutDeceasedDateOfDeathDateCapitalTax)
@@ -88,7 +91,7 @@ object RegistrationKickOutHelper {
       case Some(_) =>
         getKickoutReason.apply(rd).fold(Future.successful(Redirect(nextPage))) { kickoutReason =>
           cachingConnector.storeSingleValue(RegistrationKickoutReasonCachingKey, kickoutReason).flatMap(_ =>
-            Future.successful(Redirect(iht.controllers.registration.routes.KickoutController.onPageLoad())))}
+            Future.successful(Redirect(if(mode==Mode.Edit) KickOutPageInEditMode else KickOutPageInStandardMode)))}
 
         case None =>
           Logger.warn(failMessage)

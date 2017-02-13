@@ -20,7 +20,7 @@ import java.util.UUID
 
 import iht.constants.Constants
 import iht.controllers.ControllerHelper.Mode
-import iht.utils.CommonHelper
+import iht.utils.{CommonHelper, RegistrationKickOutHelper}
 import iht.utils.RegistrationKickOutHelper._
 import play.api.data.Form
 import play.api.mvc.{AnyContent, Request, Result}
@@ -77,7 +77,7 @@ trait RegistrationBaseControllerWithEditMode[T] extends RegistrationBaseControll
                   onwardRouteInEditMode(copyOfRd)
                 }
 
-              storeAndRedirectWithKickoutCheck(cachingConnector, copyOfRd, getKickoutReason, route, storageFailureMessage)
+              storeAndRedirectWithKickoutCheck(cachingConnector, copyOfRd, getKickoutReason, route, storageFailureMessage, mode)
             }
           )
         }

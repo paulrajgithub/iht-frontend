@@ -140,6 +140,7 @@ GET         /complete                                           iht.controllers.
 GET         /already-registered/:ihtReference                   iht.controllers.registration.DuplicateRegistrationController.onPageLoad(ihtReference:String)
 
 GET         /not-possible-to-use-service                        iht.controllers.registration.KickoutController.onPageLoad
+GET         /not-possible-to-use-service-1                        iht.controllers.registration.KickoutController.onEditPageLoad
 POST        /not-possible-to-use-service                        iht.controllers.registration.KickoutController.onSubmit
 
 ### To do ####

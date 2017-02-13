@@ -105,4 +105,14 @@ class KickoutControllerTest extends RegistrationControllerTest {
       redirectLocation(result).get should be("https://www.gov.uk/inheritance-tax")
     }
   }
+
+  "getContent" must {
+    "show correct contents in standard mode" in {
+
+    }
+
+    "show correct contents in Edit mode" in {
+
+    }
+  }
 }
