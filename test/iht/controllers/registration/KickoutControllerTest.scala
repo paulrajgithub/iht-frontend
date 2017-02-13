@@ -63,6 +63,35 @@ class KickoutControllerTest extends RegistrationControllerTest {
       }
     }
 
+    "respond suitably to onEditPageLoad" in {
+      val request = createFakeRequest(isAuthorised = true)
+      val controller = new KickoutController{
+        override val authConnector = createFakeAuthConnector(isAuthorised=true)
+        override val metrics:Metrics = Metrics
+        override val cachingConnector = mockCachingConnector
+      }
+
+      Seq(
+        (RegistrationKickOutHelper.KickoutDeceasedDateOfDeathDateCapitalTax,
+          "page.iht.registration.deceasedDateOfDeath.kickout.date.capital.tax.summary"),
+        (RegistrationKickOutHelper.KickoutDeceasedDateOfDeathDateOther,
+          "page.iht.registration.deceasedDateOfDeath.kickout.date.other.summary"),
+        (RegistrationKickOutHelper.KickoutDeceasedDetailsLocationScotland,
+          "page.iht.registration.deceasedDetails.kickout.location.summary"),
+        (RegistrationKickOutHelper.KickoutDeceasedDetailsLocationOther,
+          "page.iht.registration.deceasedDetails.kickout.location.summary"),
+        (RegistrationKickOutHelper.KickoutApplicantDetailsProbateScotland,
+          "page.iht.registration.applicantDetails.kickout.probate.summary"),
+        (RegistrationKickOutHelper.KickoutApplicantDetailsProbateNi,
+          "page.iht.registration.applicantDetails.kickout.probate.summary")
+      ).foreach{kickout=>
+        createMockToGetSingleValueFromCache(mockCachingConnector, any(), Some(kickout._1))
+        val result: Future[Result] = controller.onEditPageLoad(request)
+        status(result) should be(OK)
+        contentAsString(result).contains(Messages(kickout._2)) should be (true)
+      }
+    }
+
     "redirect to homepage on submit" in {
       val request = createFakeRequest(isAuthorised = true)
       val controller = new KickoutController{

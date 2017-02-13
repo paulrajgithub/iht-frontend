@@ -113,6 +113,14 @@ trait KickoutController extends RegistrationController {
     }
   }
 
+  def onEditPageLoad = authorisedForIht {
+    implicit user => implicit request => {
+      cachingConnector.getSingleValue(RegistrationKickoutReasonCachingKey) map { reason =>
+        Ok(content(CommonHelper.getOrException(reason))(request))
+      }
+    }
+  }
+
   def onSubmit = authorisedForIht {
     implicit user => implicit request =>
       metrics.kickOutCounter(KickOutSource.REGISTRATION)

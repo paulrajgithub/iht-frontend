@@ -19,6 +19,7 @@ package iht.utils
 import iht.config.{IhtPropertiesReader => Property}
 import iht.connector.CachingConnector
 import iht.constants.IhtProperties
+import iht.controllers.ControllerHelper.Mode
 import iht.models.{DeceasedDateOfDeath, RegistrationDetails}
 import play.api.Logger
 import play.api.mvc.Results._
@@ -80,7 +81,8 @@ object RegistrationKickOutHelper {
 
   def storeAndRedirectWithKickoutCheck(cachingConnector: CachingConnector, rd: RegistrationDetails,
                                        getKickoutReason: RegistrationDetails => Option[String], nextPage: Call,
-                                       failMessage: String = "Failed to successfully store registration details")
+                                       failMessage: String = "Failed to successfully store registration details",
+                                       mode:Mode.Value = Mode.Standard)
                                       (implicit request: Request[_], hc: HeaderCarrier): Future[Result] =
     cachingConnector.storeRegistrationDetails(rd).flatMap{
       case Some(_) =>
